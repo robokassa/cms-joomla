@@ -176,7 +176,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
                 $order['details']['BT']->order_number,
             'IncCurrLabel' => '',
             'Culture' => $currencyCode,
-            'Encoding' => 'UTF-8',
+            'Encoding' => 'Windows-1251',
             'Email' => $address->email,
         );
 
@@ -221,6 +221,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
             }
 
             $send['Receipt'] = json_encode($send['Receipt']);
+            $send['Receipt'] = rawurlencode($send['Receipt']);
             $stringToHash .= ':'.$send['Receipt'];
         }
 
