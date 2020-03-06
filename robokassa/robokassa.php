@@ -181,6 +181,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
             'Culture' => $currencyCode,
             'Encoding' => 'UTF-8',
             'Email' => $address->email,
+            'Shp_label' => 'joomla_official'
         );
 		
 		if(
@@ -241,10 +242,11 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
             $stringToHash .= ':'.$send['Receipt'];
         }
 
-        $stringToHash .= ':'.($method->sandbox ? $password1_test : $password1);
+        $stringToHash .= ':'.($method->sandbox ? $password1_test : $password1).':Shp_label=joomla_official';
 
         $send['stringToHash'] = $stringToHash;
         $send['SignatureValue'] = md5($stringToHash);
+
 
         if ($method->sandbox) {
             $send['IsTest'] = 1;
