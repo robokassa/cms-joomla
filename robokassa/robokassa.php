@@ -42,7 +42,10 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
             'debug' => array('', 'int'),
             'status_pending' => array('', 'char'),
             'status_success' => array('', 'char'),
-            'status_canceled' => array('', 'char')
+            'status_canceled' => array('', 'char'),
+			'country_mode' => array('', 'char'),
+			'currency_code' => array('', 'char'),
+			'iframe_mode' => array('', 'int')
         );
         $this->setConfigParameterable($this->_configTableFieldName, $varsToPush);
 
@@ -178,11 +181,24 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
             'Culture' => $currencyCode,
             'Encoding' => 'Windows-1251',
             'Email' => $address->email,
+            'Shp_label' => 'joomla_official'
         );
-
-        $stringToHash = $send['MrchLogin'].':'.$send['OutSum'].':'.$send['InvId'];
-
-        if ($method->fiscalization_type) {
+		
+		if(
+	        mb_strlen($method->currency_code) > 0
+	        && !(
+	        	$method->country_mode == 'KZ'
+		        && $method->currency_code == 'KZT'
+	        )
+	    )
+	    {
+	    	$send['OutSumCurrency'] = $method->currency_code;
+	        $stringToHash = $send['MrchLogin'].':'.$send['OutSum'].':'.$send['InvId'].':'.$send['OutSumCurrency'];
+		}else{
+			$stringToHash = $send['MrchLogin'].':'.$send['OutSum'].':'.$send['InvId'];
+		}
+		
+		if ($method->fiscalization_type && $method->country_mode != 'KZ') {
             $billing = $order['details']['BT'];
             $send['Receipt'] = array(
                 'sno' => $method->sno,
@@ -220,35 +236,66 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
                 }
             }
 
-            $send['Receipt'] = json_encode($send['Receipt']);
-            $send['Receipt'] = rawurlencode($send['Receipt']);
+            $send['Receipt'] = (!empty($send['Receipt']) && \is_array($send['Receipt']))
+	        ? \urlencode(\json_encode($send['Receipt'], 256))
+		    : null;;
             $stringToHash .= ':'.$send['Receipt'];
         }
 
-        $stringToHash .= ':'.($method->sandbox ? $password1_test : $password1);
+        $stringToHash .= ':'.($method->sandbox ? $password1_test : $password1).':Shp_label=joomla_official';
 
+        $send['stringToHash'] = $stringToHash;
         $send['SignatureValue'] = md5($stringToHash);
+
 
         if ($method->sandbox) {
             $send['IsTest'] = 1;
         }
-
-        $html = '<form id="robokassa" style="display:none;"'.
+		
+        if ($method->iframe_mode) {
+			unset($send['IsTest']);
+			unset($send['stringToHash']);
+			unset($send['Culture']);
+			
+			$params = '';
+			$lastParam = end($send);
+			
+			foreach ($send as $key => $inputValue) {
+				$value = htmlspecialchars($inputValue, ENT_COMPAT, 'UTF-8');
+					
+				if($lastParam == $inputValue){
+					$params .= $key . ": '" . $value . "'";
+				}else{
+					$params .= $key . ": '" . $value . "', ";
+				}
+			}
+			
+			$html = "<script type=\"text/javascript\" src=\"https://auth.robokassa.ru/Merchant/bundle/robokassa_iframe.js\"></script>";
+			$html .= "<input type=\"submit\" onclick=\"Robokassa.StartPayment({" . $params . "})\" value=\"Pay\">";
+					
+		}else{
+			$html = '<form id="robokassa" style="display:block;"'.
             'action="https://auth.robokassa.ru/Merchant/Index.aspx" '.
             'method="POST">';
-        foreach ($send as $key => $value) {
-            $html .= '<input type="hidden" name="'.$key.'" value=\''.$value.'\'>';
-        }
-        $html .= '<input type="submit" value="Pay"></form>';
-        $html .= '<script>var form = document.getElementById("robokassa");'.
-            'form.submit();</script>';
+			
+			unset($send['stringToHash']);
+			
+			foreach ($send as $key => $value) {
+				$html .= '<input type="hidden" name="'.$key.'" value=\''.$value.'\'>';
+			}
+			
+			$html .= '<input type="submit" value="Pay"></form>';
+		}
+		
+		#  $html .= '<script>var form = document.getElementById("robokassa");'.
+		#    'form.submit();</script>';
         vRequest::setVar ('html', $html);
         if ($method->debug) {
             $this->logInfo (
                 'Send data to Robokassa: '.print_r($send, true), 'message'
             );
         }
-
+				
         $modelOrder = VmModel::getModel ('orders');
         $vmorder = $modelOrder->getOrder ($order['details']['BT']->virtuemart_order_id);
         $order['customer_notified'] = 0;
