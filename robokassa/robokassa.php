@@ -179,7 +179,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
                 $order['details']['BT']->order_number,
             'IncCurrLabel' => '',
             'Culture' => $currencyCode,
-            'Encoding' => 'UTF-8',
+            'Encoding' => 'Windows-1251',
             'Email' => $address->email,
             'Shp_label' => 'joomla_official'
         );
