@@ -2,7 +2,7 @@
 <extension version="2.5" type="plugin" group="vmpayment">
     <name>Robokassa</name>
     <creationDate>December 05 2018</creationDate>
-    <author>Pimentos</author>
+    <author>Robokassa</author>
     <authorUrl>https://www.robokassa.ru</authorUrl>
     <copyright>Copyright (C) 2018 Robokassa. All rights reserved.</copyright>
     <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
