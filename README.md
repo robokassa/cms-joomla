@@ -8,18 +8,18 @@
 ###Настройка
 1. В личном кабинете Robokassa Вам необходимо указать настройки:
 	- Алгоритм расчета хеша: md5
-	- Result URL : http://ваш_магазин.ru/index.php? index.php?option=com_virtuemart&view=pluginresponse&task=pluginnotification&tmpl=component
-	- Success URL : http://ваш_магазин.ru/index.php? option=com_virtuemart&view=pluginresponse&task=pluginresponsereceived
-	- Fail Url : http://ваш_магазин.ru/index.php? option=com_virtuemart&view=pluginresponse&task=pluginUserPaymentCancel
+	- Result URL : http://ваш_магазин.ru/index.php?option=com_virtuemart&view=pluginresponse&task=pluginnotification&tmpl=component
+	- Success URL : http://ваш_магазин.ru/index.php?option=com_virtuemart&view=pluginresponse&task=pluginresponsereceived
+	- Fail Url : http://ваш_магазин.ru/index.php?option=com_virtuemart&view=pluginresponse&task=pluginUserPaymentCancel
 	- Метод отсылки данных во всех случаях POST.
 
 1. Далее проходим в административную панель магазина на Virtuemart и добавляем новый способ оплаты. Для этого пройдите в раздел Virtuemart – Магазин – Способы оплаты.
 
 1. Жмем на панели сверху Создать.
  
-1. И добавляем новый способ оплаты как изображено на скриншоте ниже. Обязательно в поле Способ оплаты нужно выбрать Robokassa и Опубликовано – Да (если необходимо отображать способ оплаты на этапе оформления заказа). Все остальные поля на Ваше усмотрение. 
+1. И добавляем новый способ оплаты. Обязательно, в поле Способ оплаты нужно выбрать Robokassa и Опубликовано – Да (если необходимо отображать способ оплаты на этапе оформления заказа). Все остальные поля на Ваше усмотрение. 
 1. Жмем Сохранить. Далее переключаемся на вкладку Конфигурация.
-1. Заполняем обязательные поля в разделе Технические настройки (данные берем с личного кабинета Robokassa):
+1. Заполняем обязательные поля в разделе Технические настройки (данные берем из личного кабинета Robokassa):
 	- Идентификатор магазина 
 	- Пароль 1
 	- Пароль 2
