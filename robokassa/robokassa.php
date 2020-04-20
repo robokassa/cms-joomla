@@ -486,7 +486,8 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
         $calcSignature = strtoupper(md5(
             $post['OutSum'].':'.
             $post['InvId'].':'.
-            ($method->sandbox ? $method->password2_test : $method->password2)
+            ($method->sandbox ? $method->password2_test : $method->password2).':Shp_label=joomla_official'
+
         ));
 
         if ($signature != $calcSignature) {
