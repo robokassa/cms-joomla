@@ -255,7 +255,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
         if ($method->iframe_mode) {
 			unset($send['IsTest']);
 			unset($send['stringToHash']);
-			unset($send['Culture']);
+			//unset($send['Culture']);
 			
 			$params = '';
 			$lastParam = end($send);
