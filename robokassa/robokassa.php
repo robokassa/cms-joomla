@@ -178,7 +178,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
             'Desc' => vmText::_ ('VMPAYMENT_ROBOKASSA_PAY_DESCRIPTION').
                 $order['details']['BT']->order_number,
             'IncCurrLabel' => '',
-            'Culture' => $currencyCode,
+            //'Culture' => $currencyCode,
             'Encoding' => 'Windows-1251',
             'Email' => $address->email,
             'Shp_label' => 'joomla_official'
