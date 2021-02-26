@@ -3,3 +3,4 @@
 -added fiscalization switch (on/off)
 -fixed receipt encoding. Now cyrylic symbols are shows correctly
 -url changed to actual https://auth.robokassa.ru/Merchant/Index.aspx
+-added fiscalization for clients from Kazakhstan
