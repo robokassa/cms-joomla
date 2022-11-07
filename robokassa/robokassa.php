@@ -100,6 +100,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
     public function plgVmConfirmedOrder ($cart, $order)
     {
 
+
         if (!($method = $this->getVmPluginMethod(
             $order['details']['BT']->virtuemart_paymentmethod_id))
         ) {
@@ -288,6 +289,13 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
         $send['stringToHash'] = $stringToHash;
         $send['SignatureValue'] = md5($stringToHash);
 
+        $ruIframe = "<script type=\"text/javascript\" src=\"https://auth.robokassa.ru/Merchant/bundle/robokassa_iframe.js\"></script>";
+        $kzIframe = "<script type=\"text/javascript\" src=\"https://auth.robokassa.kz/Merchant/bundle/robokassa_iframe.js\"></script>";
+
+        if ($method->country_mode == 'KZ' )
+            $iframeUrl = $kzIframe;
+        else
+            $iframeUrl = $ruIframe;
 
         if ($method->sandbox) {
             $send['IsTest'] = 1;
@@ -311,13 +319,26 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
                 }
             }
 
-            $html = "<script type=\"text/javascript\" src=\"https://auth.robokassa.ru/Merchant/bundle/robokassa_iframe.js\"></script>";
+            $html = $iframeUrl;
             $html .= "<input type=\"submit\" onclick=\"Robokassa.StartPayment({" . $params . "})\" value=\"Pay\">";
 
         }else{
-            $html = '<form id="robokassa" style="display:block;"'.
+
+            $ruUrl = '<form id="robokassa" style="display:block;"'.
                 'action="https://auth.robokassa.ru/Merchant/Index.aspx" '.
                 'method="POST">';
+
+            $kzUrl = '<form id="robokassa" style="display:block;"'.
+                'action="https://auth.robokassa.kz/Merchant/Index.aspx" '.
+                'method="POST">';
+
+
+            if ($method->country_mode == 'KZ' )
+                $paymentUrl = $kzUrl;
+            else
+                $paymentUrl = $ruUrl;
+
+            $html = $paymentUrl;
 
             unset($send['stringToHash']);
 
