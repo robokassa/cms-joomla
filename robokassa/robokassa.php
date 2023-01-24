@@ -209,7 +209,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
                 $send['Receipt']['items'][] = array(
                     'name' => mb_strcut($item->order_item_name, 0, 63),
                     'quantity' => round($item->product_quantity, 2),
-                    'sum' => round($item->product_subtotal_with_tax, 2),
+                    'cost' => round($item->product_item_price, 2),
                     'payment_method' => $method->payment_method,
                     'payment_object' => $method->payment_object,
                     'tax' => $method->tax
