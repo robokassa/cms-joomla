@@ -205,16 +205,29 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
                 'sno' => $method->sno,
                 'items' => array()
             );
-            foreach ($order['items'] as $item) {
-                $send['Receipt']['items'][] = array(
-                    'name' => mb_strcut($item->order_item_name, 0, 63),
-                    'quantity' => round($item->product_quantity, 2),
-                    'cost' => round($item->product_item_price, 2),
-                    'payment_method' => $method->payment_method,
-                    'payment_object' => $method->payment_object,
-                    'tax' => $method->tax
-                );
-            }
+        // Получаем общую сумму скидки на весь заказ
+         $totalDiscount = $order['details']['BT']->coupon_discount;
+         $totalDiscount = abs($totalDiscount);
+
+         // Рассчитываем общую стоимость всех товаров в заказе
+         $totalProductCost = 0;
+         foreach ($order['items'] as $item) {
+          $totalProductCost += $item->product_item_price * $item->product_quantity;
+         }
+
+        foreach ($order['items'] as $item) {
+    // Рассчитываем долю скидки для текущего товара
+    $itemDiscount = ($item->product_item_price * $item->product_quantity / $totalProductCost) * $totalDiscount;
+
+    $send['Receipt']['items'][] = array(
+        'name' => mb_strcut($item->order_item_name, 0, 63),
+        'quantity' => round($item->product_quantity, 2),
+        'cost' => round($item->product_item_price - $itemDiscount, 2),
+        'payment_method' => $method->payment_method,
+        'payment_object' => $method->payment_object,
+        'tax' => $method->tax
+    );
+}
 
             if(!empty($billing)) {
                 $shipment_cost = 0;
