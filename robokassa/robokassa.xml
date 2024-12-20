@@ -141,7 +141,10 @@
                     <option value="vat120">VMPAYMENT_ROBOKASSA_VAT120</option>
                     <option value="vat8">VMPAYMENT_ROBOKASSA_VAT8</option>
                     <option value="vat12">VMPAYMENT_ROBOKASSA_VAT12</option>
-
+                    <option value="vat5">VMPAYMENT_ROBOKASSA_VAT5</option>
+                    <option value="vat105">VMPAYMENT_ROBOKASSA_VAT105</option>
+                    <option value="vat7">VMPAYMENT_ROBOKASSA_VAT7</option>
+                    <option value="vat107">VMPAYMENT_ROBOKASSA_VAT107</option>
                 </field>
                 <field class="" name="sandbox" type="radio" default="1" label="VMPAYMENT_ROBOKASSA_SHOP_MODE"
                        description="VMPAYMENT_ROBOKASSA_SHOP_MODE_DESC">
