@@ -220,7 +220,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
     $itemDiscount = ($item->product_item_price * $item->product_quantity / $totalProductCost) * $totalDiscount;
 
     $send['Receipt']['items'][] = array(
-        'name' => mb_strcut($item->order_item_name, 0, 63),
+        'name' => mb_substr($item->order_item_name, 0, 128),
         'quantity' => round($item->product_quantity, 2),
         'cost' => round($item->product_item_price - $itemDiscount, 2),
         'payment_method' => $method->payment_method,
@@ -264,7 +264,7 @@ class plgVmPaymentRobokassa extends vmPSPlugin {
             );
             foreach ($order['items'] as $item) {
                 $send['Receipt']['items'][] = array(
-                    'name' => mb_strcut($item->order_item_name, 0, 63),
+                    'name' => mb_substr($item->order_item_name, 0, 128),
                     'quantity' => round($item->product_quantity, 2),
                     'sum' => round($item->product_subtotal_with_tax, 2),
                     'tax' => $method->tax
